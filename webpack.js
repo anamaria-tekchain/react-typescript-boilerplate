@@ -40,9 +40,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {
-                        loader: 'style-loader',
-                    },
+                    'style-loader',
                     {
                         loader: 'css-loader',
                         options: {
@@ -50,6 +48,18 @@ module.exports = {
                                 mode: 'local',
                                 localIdentName: '[local]__[hash:base64:5]'
                             }
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            ident: 'postcss',
+                            plugins: () => [
+                                require('postcss-import')(),
+                                require('postcss-preset-env')(),
+                                require('postcss-flexbugs-fixes')(),
+                                require('autoprefixer')(),
+                            ]
                         }
                     }
                 ]
@@ -82,19 +92,11 @@ module.exports = {
     // },
     plugins: [
         new webpack.EnvironmentPlugin({
-            NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+            NODE_ENV: 'development',
             DEBUG: false
         }),
         new HtmlWebpackPlugin({
-            template: './index.html',
-            minify: {
-                minifyJS: true,
-                minifyCSS: true,
-                removeComments: true,
-                useShortDoctype: true,
-                collapseWhitespace: true,
-                collapseInlineTagWhitespace: true
-            }
+            template: './index.html'
         })
     ],
     devServer: {
